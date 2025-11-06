@@ -60,35 +60,41 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link 
-              href="#" 
-              label="首頁" 
+            <Link
+              href="#"
+              label="首頁"
               active={currentPage === 'home'}
-              onClick={() => handleNavigation('home')} 
+              onClick={() => handleNavigation('home')}
             />
-            <Link 
-              href="#" 
-              label="關於我們" 
+            <Link
+              href="#"
+              label="關於我們"
               active={currentPage === 'about'}
-              onClick={() => handleNavigation('about')} 
+              onClick={() => handleNavigation('about')}
             />
-            <Link 
-              href="#" 
-              label="捐血資訊" 
+            <Link
+              href="#"
+              label="協會願景"
+              active={currentPage === 'vision'}
+              onClick={() => handleNavigation('vision')}
+            />
+            <Link
+              href="#"
+              label="捐血資訊"
               active={currentPage === 'donate'}
-              onClick={() => handleNavigation('donate')} 
+              onClick={() => handleNavigation('donate')}
             />
-            <Link 
-              href="#" 
-              label="據點查詢" 
+            <Link
+              href="#"
+              label="據點查詢"
               active={currentPage === 'locations'}
-              onClick={() => handleNavigation('locations')} 
+              onClick={() => handleNavigation('locations')}
             />
-            <Link 
-              href="#" 
-              label="聯絡我們" 
+            <Link
+              href="#"
+              label="聯絡我們"
               active={currentPage === 'contact'}
-              onClick={() => handleNavigation('contact')} 
+              onClick={() => handleNavigation('contact')}
             />
           </nav>
 
@@ -163,44 +169,51 @@ const Header: React.FC<HeaderProps> = ({
       {/* Mobile Navigation */}
       <div
         className={`md:hidden absolute w-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-96 py-4' : 'max-h-0 overflow-hidden'
+          isMenuOpen ? 'max-h-[30rem] py-4' : 'max-h-0 overflow-hidden'
         }`}
       >
         <div className="container mx-auto px-4 flex flex-col space-y-4 pb-4">
-          <Link 
-            href="#" 
-            label="首頁" 
-            mobile 
+          <Link
+            href="#"
+            label="首頁"
+            mobile
             active={currentPage === 'home'}
-            onClick={() => handleNavigation('home')} 
+            onClick={() => handleNavigation('home')}
           />
-          <Link 
-            href="#" 
-            label="關於我們" 
-            mobile 
+          <Link
+            href="#"
+            label="關於我們"
+            mobile
             active={currentPage === 'about'}
-            onClick={() => handleNavigation('about')} 
+            onClick={() => handleNavigation('about')}
           />
-          <Link 
-            href="#" 
-            label="捐血資訊" 
-            mobile 
+          <Link
+            href="#"
+            label="協會願景"
+            mobile
+            active={currentPage === 'vision'}
+            onClick={() => handleNavigation('vision')}
+          />
+          <Link
+            href="#"
+            label="捐血資訊"
+            mobile
             active={currentPage === 'donate'}
-            onClick={() => handleNavigation('donate')} 
+            onClick={() => handleNavigation('donate')}
           />
-          <Link 
-            href="#" 
-            label="據點查詢" 
-            mobile 
+          <Link
+            href="#"
+            label="據點查詢"
+            mobile
             active={currentPage === 'locations'}
-            onClick={() => handleNavigation('locations')} 
+            onClick={() => handleNavigation('locations')}
           />
-          <Link 
-            href="#" 
-            label="聯絡我們" 
-            mobile 
+          <Link
+            href="#"
+            label="聯絡我們"
+            mobile
             active={currentPage === 'contact'}
-            onClick={() => handleNavigation('contact')} 
+            onClick={() => handleNavigation('contact')}
           />
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Home from './pages/Home';
 import About from './pages/About';
+import Vision from './pages/Vision';
 import Donate from './pages/Donate';
 import PetRegistration from './pages/PetRegistration';
 import VetRegistration from './pages/VetRegistration';
@@ -149,6 +150,8 @@ function App() {
         return <Home onNavigate={navigate} />;
       case 'about':
         return <About />;
+      case 'vision':
+        return <Vision />;
       case 'donate':
         return <Donate />;
       case 'pet-registration':
@@ -158,16 +161,16 @@ function App() {
       case 'login':
         return <Login onLogin={handleLogin} onNavigate={navigate} />;
       case 'member-dashboard':
-        return currentUser?.type === 'owner' ? 
-          <MemberDashboard user={currentUser} onNavigate={navigate} /> : 
+        return currentUser?.type === 'owner' ?
+          <MemberDashboard user={currentUser} onNavigate={navigate} /> :
           <Login onLogin={handleLogin} onNavigate={navigate} />;
       case 'vet-dashboard':
-        return currentUser?.type === 'vet' ? 
-          <VetDashboard user={currentUser} onNavigate={navigate} /> : 
+        return currentUser?.type === 'vet' ?
+          <VetDashboard user={currentUser} onNavigate={navigate} /> :
           <Login onLogin={handleLogin} onNavigate={navigate} />;
       case 'blood-request':
-        return currentUser?.type === 'owner' ? 
-          <BloodRequest user={currentUser} onNavigate={navigate} /> : 
+        return currentUser?.type === 'owner' ?
+          <BloodRequest user={currentUser} onNavigate={navigate} /> :
           <Login onLogin={handleLogin} onNavigate={navigate} />;
       case 'locations':
         return <Locations />;
