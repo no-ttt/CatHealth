@@ -14,6 +14,9 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
   const [paymentStep, setPaymentStep] = useState(1);
   const [isPaid, setIsPaid] = useState(user.isPaid || false);
   const [showPetForm, setShowPetForm] = useState(false);
+  const [showReportDetail, setShowReportDetail] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<HealthReport | null>(null);
+  const [reportDetailTab, setReportDetailTab] = useState('bloodType');
   const [petFormData, setPetFormData] = useState({
     name: '',
     birthday: '',
@@ -300,6 +303,312 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
       </div>
     </div>
   );
+
+  // Mock detailed report data
+  const mockBloodTypeData = [
+    { item: '血型', result: 'A型', referenceRange: 'A/B/AB', unit: '-' },
+    { item: '交叉配對試驗', result: '陰性', referenceRange: '陰性', unit: '-' },
+    { item: '血球凝集反應', result: '無', referenceRange: '無', unit: '-' },
+  ];
+
+  const mockBiochemistryData = [
+    { item: '白血球 (WBC)', result: '8.5', referenceRange: '5.5-19.5', unit: '10^3/μL', status: 'normal' },
+    { item: '紅血球 (RBC)', result: '7.8', referenceRange: '5.0-10.0', unit: '10^6/μL', status: 'normal' },
+    { item: '血紅素 (HGB)', result: '12.5', referenceRange: '9.5-15.0', unit: 'g/dL', status: 'normal' },
+    { item: '血小板 (PLT)', result: '350', referenceRange: '200-500', unit: '10^3/μL', status: 'normal' },
+    { item: 'ALT (肝功能)', result: '45', referenceRange: '10-100', unit: 'U/L', status: 'normal' },
+    { item: 'AST (肝功能)', result: '38', referenceRange: '10-50', unit: 'U/L', status: 'normal' },
+    { item: 'BUN (腎功能)', result: '22', referenceRange: '15-34', unit: 'mg/dL', status: 'normal' },
+    { item: 'CRE (腎功能)', result: '1.2', referenceRange: '0.8-2.4', unit: 'mg/dL', status: 'normal' },
+    { item: '血糖 (GLU)', result: '95', referenceRange: '70-150', unit: 'mg/dL', status: 'normal' },
+  ];
+
+  const mockDNAData = [
+    { item: 'FeLV (貓白血病病毒)', result: '陰性', referenceRange: '陰性', status: 'normal' },
+    { item: 'FIV (貓愛滋病病毒)', result: '陰性', referenceRange: '陰性', status: 'normal' },
+    { item: '遺傳性心肌病 (HCM)', result: '低風險', referenceRange: '低風險', status: 'normal' },
+    { item: '多囊性腎病 (PKD)', result: '未檢出', referenceRange: '未檢出', status: 'normal' },
+    { item: '腎臟疾病風險', result: '中等', referenceRange: '低-中', status: 'warning' },
+    { item: '糖尿病風險', result: '低', referenceRange: '低', status: 'normal' },
+  ];
+
+  const ReportDetailModal = () => {
+    if (!selectedReport) return null;
+
+    const petName = mockPets.find(pet => pet.id === selectedReport.petId)?.name || '未知';
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+          {/* Header */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {petName} - 健康檢查報告
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                  檢查日期：{selectedReport.date} | 報告類型：{selectedReport.type}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowReportDetail(false);
+                  setSelectedReport(null);
+                  setReportDetailTab('bloodType');
+                }}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <X size={28} />
+              </button>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex space-x-2 mt-6 border-b border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setReportDetailTab('bloodType')}
+                className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                  reportDetailTab === 'bloodType'
+                    ? 'text-red-600 dark:text-red-500 border-red-600 dark:border-red-500'
+                    : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                血型檢測
+              </button>
+              <button
+                onClick={() => setReportDetailTab('biochemistry')}
+                className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                  reportDetailTab === 'biochemistry'
+                    ? 'text-red-600 dark:text-red-500 border-red-600 dark:border-red-500'
+                    : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                生化檢驗
+              </button>
+              <button
+                onClick={() => setReportDetailTab('dna')}
+                className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+                  reportDetailTab === 'dna'
+                    ? 'text-red-600 dark:text-red-500 border-red-600 dark:border-red-500'
+                    : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+              >
+                DNA分析
+              </button>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {reportDetailTab === 'bloodType' && (
+              <div>
+                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">血型檢測結果</h4>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-900">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測項目
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測結果
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          參考範圍
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          單位
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                      {mockBloodTypeData.map((data, index) => (
+                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            {data.item}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold">
+                            {data.result}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {data.referenceRange}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {data.unit}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                  <h5 className="font-semibold text-gray-900 dark:text-white mb-2">檢測說明</h5>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    血型檢測結果顯示此貓咪為A型血，這是貓咪中最常見的血型。交叉配對試驗結果為陰性，表示無血型不合的情況。
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {reportDetailTab === 'biochemistry' && (
+              <div>
+                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">生化檢驗結果</h4>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-900">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測項目
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測結果
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          參考範圍
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          單位
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          狀態
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                      {mockBiochemistryData.map((data, index) => (
+                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            {data.item}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold">
+                            {data.result}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {data.referenceRange}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {data.unit}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              data.status === 'normal'
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                            }`}>
+                              {data.status === 'normal' ? '正常' : '注意'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-6 bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                  <h5 className="font-semibold text-gray-900 dark:text-white mb-2">檢驗總結</h5>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    所有生化指標均在正常範圍內。血球計數、肝功能（ALT、AST）、腎功能（BUN、CRE）和血糖水平均正常，顯示整體健康狀況良好。建議定期追蹤檢查以維持健康。
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {reportDetailTab === 'dna' && (
+              <div>
+                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">DNA分析結果</h4>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-900">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測項目
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          檢測結果
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          參考值
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          狀態
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                      {mockDNAData.map((data, index) => (
+                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            {data.item}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold">
+                            {data.result}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {data.referenceRange}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              data.status === 'normal'
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                            }`}>
+                              {data.status === 'normal' ? '正常' : '注意'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-6 space-y-4">
+                  <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                    <h5 className="font-semibold text-gray-900 dark:text-white mb-2">基因檢測總結</h5>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      DNA分析顯示此貓咪未攜帶FeLV和FIV病毒，遺傳性心肌病和多囊性腎病風險皆為低。
+                    </p>
+                  </div>
+                  <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                    <h5 className="font-semibold text-gray-900 dark:text-white mb-2">健康建議</h5>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      腎臟疾病風險評估為中等，建議定期監測腎功能指標，維持適當水分攝取，並諮詢獸醫師制定預防保健計畫。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                報告狀態：
+                <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded text-xs font-medium">
+                  {selectedReport.status}
+                </span>
+              </div>
+              <div className="flex space-x-3">
+                <button className="flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">
+                  <Download size={16} className="mr-2" />
+                  下載報告
+                </button>
+                <button
+                  onClick={() => {
+                    setShowReportDetail(false);
+                    setSelectedReport(null);
+                    setReportDetailTab('bloodType');
+                  }}
+                  className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  關閉
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderOverview = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -402,7 +711,14 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
                   </span>
                 </div>
                 <div className="flex space-x-2">
-                  <button className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                  <button
+                    onClick={() => {
+                      setSelectedReport(report);
+                      setShowReportDetail(true);
+                      setReportDetailTab('bloodType');
+                    }}
+                    className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
                     <Eye size={16} className="mr-1" />
                     檢視
                   </button>
@@ -969,6 +1285,7 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
       {showPaymentModal && <PaymentModal />}
       {showPaymentProcess && <PaymentProcessModal />}
       {showPetForm && <PetForm />}
+      {showReportDetail && <ReportDetailModal />}
     </main>
   );
 };
