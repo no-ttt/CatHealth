@@ -297,6 +297,95 @@ const Vision: React.FC = () => {
               </p>
             </div>
 
+            <div className="mb-20 bg-gray-50 dark:bg-gray-800 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-12">
+                台灣貓血庫健康育種協會組織圖
+              </h3>
+
+              <div className="flex flex-col items-center space-y-8">
+                <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-8 py-4 shadow-md">
+                  <div className="text-center font-bold text-lg text-gray-900 dark:text-white">
+                    台灣貓血庫<br />健康育種協會
+                  </div>
+                </div>
+
+                <div className="w-0.5 h-8 bg-gray-300 dark:bg-gray-600"></div>
+
+                <div className="flex justify-center items-start gap-16">
+                  <div className="flex flex-col items-center space-y-6">
+                    <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-8 py-4 shadow-md">
+                      <div className="text-center font-bold text-gray-900 dark:text-white">監事會</div>
+                    </div>
+
+                    <div className="w-0.5 h-8 bg-gray-300 dark:bg-gray-600"></div>
+
+                    <div className="flex gap-8">
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">監事</div>
+                      </div>
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">常務監事</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-8 py-4 shadow-md">
+                        <div className="text-center font-bold text-gray-900 dark:text-white">理事會</div>
+                      </div>
+                      <div className="border-2 border-dashed border-gray-400 dark:border-gray-500 rounded-lg px-6 py-3">
+                        <div className="text-center text-gray-600 dark:text-gray-400">顧問群</div>
+                      </div>
+                    </div>
+
+                    <div className="w-0.5 h-8 bg-gray-300 dark:bg-gray-600"></div>
+
+                    <div className="flex gap-8">
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">理事</div>
+                      </div>
+                      <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center font-bold text-red-600 dark:text-red-500">理事長</div>
+                      </div>
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">常務理事</div>
+                      </div>
+                    </div>
+
+                    <div className="w-0.5 h-8 bg-gray-300 dark:bg-gray-600"></div>
+
+                    <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-8 py-4 shadow-md">
+                      <div className="text-center font-bold text-gray-900 dark:text-white">秘書長</div>
+                    </div>
+
+                    <div className="w-0.5 h-8 bg-gray-300 dark:bg-gray-600"></div>
+
+                    <div className="flex gap-8">
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">行政組</div>
+                      </div>
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">會計組</div>
+                      </div>
+                      <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-lg px-6 py-3 shadow-md">
+                        <div className="text-center text-gray-900 dark:text-white">業務組</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                領導團隊成員
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                經驗豐富的專業人士，共同推動協會發展
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {leadershipTeam.map((member, index) => (
                 <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
