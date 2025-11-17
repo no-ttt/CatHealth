@@ -2,11 +2,7 @@ import React from 'react';
 import { Heart, Clock, MapPin } from 'lucide-react';
 import { CTAButton } from './Navigation';
 
-interface HeroProps {
-  onNavigate: (path: string) => void;
-}
-
-const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
+const Hero: React.FC = () => {
   return (
     <section className="pt-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 to-red-900/20 dark:from-red-900/30 dark:to-gray-900/40 z-0"></div>
@@ -27,8 +23,8 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <CTAButton primary onClick={() => onNavigate('pet-registration')}>註冊您的愛貓</CTAButton>
-              <CTAButton onClick={() => onNavigate('about')}>了解更多</CTAButton>
+              <CTAButton primary href="/CatHealth/pages/pet-registration/index.html">註冊您的愛貓</CTAButton>
+              <CTAButton href="/CatHealth/pages/about/index.html">了解更多</CTAButton>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

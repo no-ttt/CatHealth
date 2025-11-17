@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { User } from '../App';
+import { User } from '../types';
 
 interface LoginProps {
   onLogin: (user: User) => void;

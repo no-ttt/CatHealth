@@ -5,17 +5,12 @@ interface LinkProps {
   label: string;
   mobile?: boolean;
   active?: boolean;
-  onClick?: () => void;
 }
 
-export const Link: React.FC<LinkProps> = ({ href, label, mobile, active, onClick }) => {
+export const Link: React.FC<LinkProps> = ({ href, label, mobile, active }) => {
   return (
     <a
       href={href}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick?.();
-      }}
       className={`
         font-medium transition-colors duration-200
         ${mobile 
@@ -37,16 +32,16 @@ export const Link: React.FC<LinkProps> = ({ href, label, mobile, active, onClick
   );
 };
 
-export const CTAButton: React.FC<{ children: React.ReactNode; primary?: boolean; onClick?: () => void }> = ({ 
+export const CTAButton: React.FC<{ children: React.ReactNode; primary?: boolean; href: string; }> = ({ 
   children, 
   primary = false,
-  onClick
+  href
 }) => {
   return (
-    <button
-      onClick={onClick}
+    <a
+      href={href}
       className={`
-        px-6 py-3 rounded-md font-medium transition-all duration-200 transform hover:scale-105
+        inline-block px-6 py-3 rounded-md font-medium transition-all duration-200 transform hover:scale-105 text-center
         ${primary 
           ? 'bg-red-600 text-white hover:bg-red-700 shadow-lg hover:shadow-xl dark:bg-red-700 dark:hover:bg-red-600' 
           : 'bg-white text-red-600 border border-red-600 hover:bg-red-50 dark:bg-gray-800 dark:text-red-500 dark:border-red-500 dark:hover:bg-gray-700'
@@ -54,7 +49,7 @@ export const CTAButton: React.FC<{ children: React.ReactNode; primary?: boolean;
       `}
     >
       {children}
-    </button>
+    </a>
   );
 };
 

@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Upload, Calendar, MapPin, FileText, Phone, CheckCircle, Navigation } from 'lucide-react';
-import { User as UserType } from '../App';
-
-interface BloodRequestProps {
-  user: UserType;
-  onNavigate: (path: string) => void;
-}
+import { User as UserType } from '../types';
 
 interface BloodRequestFormData {
   petId: string;
@@ -33,7 +28,8 @@ interface DonorLocation {
   distance: number;
 }
 
-const BloodRequest: React.FC<BloodRequestProps> = ({ user, onNavigate }) => {
+const BloodRequest: React.FC = () => {
+  const [user, setUser] = useState<UserType | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<BloodRequestFormData>({
     petId: '',
@@ -50,6 +46,25 @@ const BloodRequest: React.FC<BloodRequestProps> = ({ user, onNavigate }) => {
     additionalNotes: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // MPA 頁面導航 with base path support
+  const onNavigate = (path: string) => {
+    const base = import.meta.env.BASE_URL || '/CatHealth/';
+    const targetPath = path === 'home' 
+      ? `${base}index.html` 
+      : `${base}pages/${path}/index.html`;
+    window.location.href = targetPath;
+  };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      // 如果沒有使用者資訊，導向登入頁
+      onNavigate('login');
+    }
+  }, []);
 
   // Mock pet data
   const mockPets = [
@@ -122,6 +137,11 @@ const BloodRequest: React.FC<BloodRequestProps> = ({ user, onNavigate }) => {
     setIsSubmitted(true);
     // Blood request form submission logic would be processed here
   };
+
+  // 如果還在載入使用者資料，可以顯示一個 loading 畫面
+  if (!user) {
+    return <div className="pt-20 min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center mb-8">

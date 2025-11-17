@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Droplet, Moon, Sun, User, LogOut } from 'lucide-react';
 import { Link } from './Navigation';
-import { User as UserType } from '../App';
 
+// 在 MPA 模式下，我們直接在此處定義共用類型，而不是從 App.tsx 導入
+export interface UserType {
+  name: string;
+  type: 'owner' | 'vet';
+}
 interface HeaderProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
   currentPage: string;
   currentUser: UserType | null;
-  onNavigate: (path: string) => void;
   onLogout: () => void;
 }
 
@@ -17,7 +20,6 @@ const Header: React.FC<HeaderProps> = ({
   toggleDarkMode, 
   currentPage, 
   currentUser,
-  onNavigate,
   onLogout 
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,11 +35,6 @@ const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavigation = (path: string) => {
-    onNavigate(path);
-    setIsMenuOpen(false);
-  };
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -48,53 +45,47 @@ const Header: React.FC<HeaderProps> = ({
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <div 
-            className="flex items-center cursor-pointer" 
-            onClick={() => handleNavigation('home')}
+          <a 
+            href="/CatHealth/"
+            className="flex items-center" 
           >
             <Droplet size={32} className="text-red-600 dark:text-red-500 mr-2" />
             <span className="text-2xl font-bold text-gray-900 dark:text-white">
             Cat<span className="text-red-600 dark:text-red-500">Health</span>
             </span>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             <Link
-              href="#"
+              href="/CatHealth/"
               label="首頁"
               active={currentPage === 'home'}
-              onClick={() => handleNavigation('home')}
             />
             <Link
-              href="#"
+              href="/CatHealth/pages/about/index.html"
               label="關於我們"
               active={currentPage === 'about'}
-              onClick={() => handleNavigation('about')}
             />
             <Link
-              href="#"
+              href="/CatHealth/pages/vision/index.html"
               label="協會願景"
               active={currentPage === 'vision'}
-              onClick={() => handleNavigation('vision')}
             />
             <Link
-              href="#"
+              href="/CatHealth/pages/donate/index.html"
               label="捐血資訊"
               active={currentPage === 'donate'}
-              onClick={() => handleNavigation('donate')}
             />
             <Link
-              href="#"
+              href="/CatHealth/pages/locations/index.html"
               label="據點查詢"
               active={currentPage === 'locations'}
-              onClick={() => handleNavigation('locations')}
             />
             <Link
-              href="#"
+              href="/CatHealth/pages/contact/index.html"
               label="聯絡我們"
               active={currentPage === 'contact'}
-              onClick={() => handleNavigation('contact')}
             />
           </nav>
 
@@ -124,15 +115,12 @@ const Header: React.FC<HeaderProps> = ({
                 
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
-                    <button
-                      onClick={() => {
-                        handleNavigation(currentUser.type === 'owner' ? 'member-dashboard' : 'vet-dashboard');
-                        setIsUserMenuOpen(false);
-                      }}
+                    <a
+                      href={currentUser.type === 'owner' ? '/CatHealth/pages/member-dashboard/index.html' : '/CatHealth/pages/vet-dashboard/index.html'}
                       className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       會員中心
-                    </button>
+                    </a>
                     <button
                       onClick={() => {
                         onLogout();
@@ -147,12 +135,12 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </div>
             ) : (
-              <button
-                onClick={() => handleNavigation('login')}
+              <a
+                href="/CatHealth/pages/login/index.html"
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 登入
-              </button>
+              </a>
             )}
 
             {/* Mobile menu button */}
@@ -174,46 +162,40 @@ const Header: React.FC<HeaderProps> = ({
       >
         <div className="container mx-auto px-4 flex flex-col space-y-4 pb-4">
           <Link
-            href="#"
+            href="/CatHealth/"
             label="首頁"
             mobile
             active={currentPage === 'home'}
-            onClick={() => handleNavigation('home')}
           />
           <Link
-            href="#"
+            href="/CatHealth/pages/about/index.html"
             label="關於我們"
             mobile
             active={currentPage === 'about'}
-            onClick={() => handleNavigation('about')}
           />
           <Link
-            href="#"
+            href="/CatHealth/pages/vision/index.html"
             label="協會願景"
             mobile
             active={currentPage === 'vision'}
-            onClick={() => handleNavigation('vision')}
           />
           <Link
-            href="#"
+            href="/CatHealth/pages/donate/index.html"
             label="捐血資訊"
             mobile
             active={currentPage === 'donate'}
-            onClick={() => handleNavigation('donate')}
           />
           <Link
-            href="#"
+            href="/CatHealth/pages/locations/index.html"
             label="據點查詢"
             mobile
             active={currentPage === 'locations'}
-            onClick={() => handleNavigation('locations')}
           />
           <Link
-            href="#"
+            href="/CatHealth/pages/contact/index.html"
             label="聯絡我們"
             mobile
             active={currentPage === 'contact'}
-            onClick={() => handleNavigation('contact')}
           />
         </div>
       </div>

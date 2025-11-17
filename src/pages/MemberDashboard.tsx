@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Heart, FileText, Calendar, Phone, MapPin, AlertTriangle, Download, Eye, CreditCard, Lock, CheckCircle, Plus, X, Search } from 'lucide-react';
-import { User as UserType, Pet, HealthReport, DNAReport } from '../App';
+import { User as UserType, Pet, HealthReport, DNAReport } from '../types';
 
-interface MemberDashboardProps {
-  user: UserType;
-  onNavigate: (path: string) => void;
-}
-
-const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) => {
+const MemberDashboard: React.FC = () => {
+  const [user, setUser] = useState<UserType | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  // MPA 頁面導航 with base path support
+  const onNavigate = (path: string) => {
+    const base = import.meta.env.BASE_URL || '/CatHealth/';
+    const targetPath = path === 'home' 
+      ? `${base}index.html` 
+      : `${base}pages/${path}/index.html`;
+    window.location.href = targetPath;
+  };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      // 如果沒有使用者資訊，導向登入頁
+      onNavigate('login');
+    }
+  }, []);
+
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentProcess, setShowPaymentProcess] = useState(false);
   const [paymentStep, setPaymentStep] = useState(1);
-  const [isPaid, setIsPaid] = useState(user.isPaid || false);
+  const [isPaid, setIsPaid] = useState(false);
   const [showPetForm, setShowPetForm] = useState(false);
   const [showReportDetail, setShowReportDetail] = useState(false);
   const [selectedReport, setSelectedReport] = useState<HealthReport | null>(null);
@@ -27,37 +43,35 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
     gender: ''
   });
 
+  // 在 user 狀態更新後，同步 isPaid 狀態
+  useEffect(() => {
+    if (user) setIsPaid(user.isPaid || false);
+  }, [user]);
+
   // Mock pet data
-  const [mockPets, setMockPets] = useState<Pet[]>([
-    {
-      id: '1',
-      name: '小花',
-      birthday: '2020-03-15',
-      chipNumber: '900123456789012',
-      bloodType: 'A型',
-      healthStatus: '健康',
-      lastCheckup: '2024-01-15',
-      isDonor: true,
-      ownerId: user.id,
-      breed: '美國短毛貓',
-      weight: 4.5,
-      gender: '母'
-    },
-    {
-      id: '2',
-      name: '小白',
-      birthday: '2021-06-20',
-      chipNumber: '900123456789013',
-      bloodType: 'B型',
-      healthStatus: '健康',
-      lastCheckup: '2024-02-01',
-      isDonor: false,
-      ownerId: user.id,
-      breed: '英國短毛貓',
-      weight: 3.8,
-      gender: '公'
+  const [mockPets, setMockPets] = useState<Pet[]>([]);
+
+  // 在 user 狀態更新後，更新 mockPets 的 ownerId
+  useEffect(() => {
+    if (user) {
+      setMockPets([
+        {
+          id: '1',
+          name: '小花',
+          birthday: '2020-03-15',
+          chipNumber: '900123456789012',
+          bloodType: 'A型',
+          healthStatus: '健康',
+          lastCheckup: '2024-01-15',
+          isDonor: true,
+          ownerId: user.id,
+          breed: '美國短毛貓',
+          weight: 4.5,
+          gender: '母'
+        }
+      ]);
     }
-  ]);
+  }, [user]);
 
   // Mock health reports
   const mockHealthReports: HealthReport[] = [
@@ -117,6 +131,7 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
 
   const handlePetFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return; // 防禦性檢查
     const newPet: Pet = {
       id: (mockPets.length + 1).toString(),
       name: petFormData.name,
@@ -145,6 +160,11 @@ const MemberDashboard: React.FC<MemberDashboardProps> = ({ user, onNavigate }) =
     });
     alert('貓咪資料新增成功！');
   };
+
+  // 如果還在載入使用者資料或使用者不存在，顯示 Loading 或直接返回 null
+  if (!user) {
+    return <div className="pt-20 min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   const PetForm = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

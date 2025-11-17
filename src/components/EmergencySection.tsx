@@ -2,11 +2,7 @@ import React from 'react';
 import { AlertTriangle, Phone, Clock, ArrowRight } from 'lucide-react';
 import { CTAButton } from './Navigation';
 
-interface EmergencySectionProps {
-  onNavigate?: (path: string) => void;
-}
-
-const EmergencySection: React.FC<EmergencySectionProps> = ({ onNavigate }) => {
+const EmergencySection: React.FC = () => {
   return (
     <section className="py-20 bg-gradient-to-r from-red-600/40 to-red-800/40 dark:from-red-700/40 dark:to-red-900/40 text-white" id="emergency">
       <div className="container mx-auto px-4">
@@ -42,38 +38,38 @@ const EmergencySection: React.FC<EmergencySectionProps> = ({ onNavigate }) => {
               </div>
             </div>
             
-            <CTAButton>申請緊急用血</CTAButton>
+            <CTAButton href="/CatHealth/pages/emergency/index.html">申請緊急用血</CTAButton>
           </div>
           
           <div className="md:w-1/2 bg-white/10 backdrop-blur-sm rounded-xl p-6 md:p-8">
             <h3 className="text-2xl font-bold mb-6">快速註冊</h3>
             
             <div className="space-y-4 mb-6">
-              <button
-                onClick={() => onNavigate?.('pet-registration')}
+              <a
+                href="/CatHealth/pages/pet-registration/index.html"
                 className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-lg p-4 text-left transition-all duration-200"
               >
                 <h4 className="font-semibold text-white mb-2">寵物飼主註冊</h4>
                 <p className="text-white/80 text-sm">註冊您的愛貓，建立健康檔案並加入捐血計畫</p>
-              </button>
+              </a>
               
-              <button
-                onClick={() => onNavigate?.('vet-registration')}
+              <a
+                href="/CatHealth/pages/vet-registration/index.html"
                 className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-lg p-4 text-left transition-all duration-200"
               >
                 <h4 className="font-semibold text-white mb-2">獸醫診所註冊</h4>
                 <p className="text-white/80 text-sm">加入我們的合作夥伴網絡，獲得血液媒合服務</p>
-              </button>
+              </a>
             </div>
             
             <div className="mt-4 text-center">
-              <button 
-                onClick={() => onNavigate?.('about')}
+              <a 
+                href="/CatHealth/pages/about/index.html"
                 className="inline-flex items-center text-white/80 text-sm hover:text-white transition-colors"
               >
                 了解更多緊急用血計畫
                 <ArrowRight size={14} className="ml-1" />
-              </button>
+              </a>
             </div>
           </div>
         </div>

@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Building2, Search, MapPin, Phone, Filter, Users, Plus, CreditCard, AlertTriangle, FileText, X, CheckCircle, Lock, Eye, Download } from 'lucide-react';
-import { User as UserType, Pet, HealthReport } from '../App';
-
-interface VetDashboardProps {
-  user: UserType;
-  onNavigate: (path: string) => void;
-}
+import { User as UserType, Pet, HealthReport } from '../types';
 
 interface DonorInfo {
   id: string;
@@ -18,7 +13,32 @@ interface DonorInfo {
   isAvailable: boolean;
 }
 
-const VetDashboard: React.FC<VetDashboardProps> = ({ user, onNavigate }) => {
+const VetDashboard: React.FC = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+
+  // MPA 頁面導航 with base path support
+  const onNavigate = (path: string) => {
+    const base = import.meta.env.BASE_URL || '/CatHealth/';
+    const targetPath = path === 'home' 
+      ? `${base}index.html` 
+      : `${base}pages/${path}/index.html`;
+    window.location.href = targetPath;
+  };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      if (parsedUser.type === 'vet') {
+        setUser(parsedUser);
+      } else {
+        onNavigate('login'); // 如果使用者不是獸醫，導向登入頁
+      }
+    } else {
+      onNavigate('login'); // 如果沒有使用者資訊，導向登入頁
+    }
+  }, []);
+
   const [activeTab, setActiveTab] = useState('cats');
   const [searchFilters, setSearchFilters] = useState({
     bloodType: '',
@@ -190,6 +210,11 @@ const VetDashboard: React.FC<VetDashboardProps> = ({ user, onNavigate }) => {
     });
     alert('貓咪資料新增成功！');
   };
+
+  // 如果還在載入使用者資料或使用者不存在，顯示 Loading
+  if (!user) {
+    return <div className="pt-20 min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   // Mock detailed report data
   const mockBloodTypeData = [

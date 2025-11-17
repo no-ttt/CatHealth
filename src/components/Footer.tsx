@@ -1,16 +1,7 @@
 import React from 'react';
 import { Droplet, Facebook, Twitter, Instagram, Youtube, Mail, Phone } from 'lucide-react';
 
-interface FooterProps {
-  onNavigate: (path: string) => void;
-}
-
-const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const handleNavigation = (path: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    onNavigate(path);
-  };
-
+const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -46,22 +37,22 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h3 className="text-lg font-semibold mb-4">快速連結</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" onClick={(e) => handleNavigation('home', e)} className="text-gray-400 hover:text-red-500 transition-colors">首頁</a>
+                <a href="/CatHealth/" className="text-gray-400 hover:text-red-500 transition-colors">首頁</a>
               </li>
               <li>
-                <a href="#" onClick={(e) => handleNavigation('about', e)} className="text-gray-400 hover:text-red-500 transition-colors">關於我們</a>
+                <a href="/CatHealth/pages/about/index.html" className="text-gray-400 hover:text-red-500 transition-colors">關於我們</a>
               </li>
               <li>
-                <a href="#" onClick={(e) => handleNavigation('donate', e)} className="text-gray-400 hover:text-red-500 transition-colors">捐血資訊</a>
+                <a href="/CatHealth/pages/donate/index.html" className="text-gray-400 hover:text-red-500 transition-colors">捐血資訊</a>
               </li>
               <li>
-                <a href="#" onClick={(e) => handleNavigation('locations', e)} className="text-gray-400 hover:text-red-500 transition-colors">據點查詢</a>
+                <a href="/CatHealth/pages/locations/index.html" className="text-gray-400 hover:text-red-500 transition-colors">據點查詢</a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">緊急申請</a>
+                <a href="/CatHealth/pages/emergency/index.html" className="text-gray-400 hover:text-red-500 transition-colors">緊急申請</a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">常見問題</a>
+                <a href="/CatHealth/#faq" className="text-gray-400 hover:text-red-500 transition-colors">常見問題</a>
               </li>
             </ul>
           </div>
@@ -102,12 +93,12 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <span className="text-gray-400">(02) 555-CATS</span>
               </li>
               <li>
-                <button 
-                  onClick={() => onNavigate('contact')}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition-colors"
+                <a 
+                  href="/CatHealth/pages/contact/index.html"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition-colors px-4"
                 >
                   聯絡表單
-                </button>
+                </a>
               </li>
             </ul>
           </div>

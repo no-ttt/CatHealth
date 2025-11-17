@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, User, Phone, MapPin, CreditCard, FileText, CheckCircle } from 'lucide-react';
 
-interface VetRegistrationProps {
-  onNavigate: (path: string) => void;
-}
-
 interface VetFormData {
   doctorName: string;
   hospitalName: string;
@@ -15,7 +11,7 @@ interface VetFormData {
   agreeToTerms: boolean;
 }
 
-const VetRegistration: React.FC<VetRegistrationProps> = ({ onNavigate }) => {
+const VetRegistration: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<VetFormData>({
     doctorName: '',
@@ -26,6 +22,15 @@ const VetRegistration: React.FC<VetRegistrationProps> = ({ onNavigate }) => {
     licenseNumber: '',
     agreeToTerms: false
   });
+
+  // MPA-style navigation with base path support
+  const onNavigate = (path: string) => {
+    const base = import.meta.env.BASE_URL || '/CatHealth/';
+    const targetPath = path === 'home' 
+      ? `${base}index.html` 
+      : `${base}pages/${path}/index.html`;
+    window.location.href = targetPath;
+  };
 
   const handleInputChange = (field: keyof VetFormData, value: string | boolean) => {
     setFormData(prev => ({
